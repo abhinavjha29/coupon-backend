@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Coupon File</title>
+</head>
+
+<body>
+  <form id="excelForm">
+    <input type="file" id="couponFile" name="couponFile">
+    <button type="submit">Upload File</button>
+  </form>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('excelForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const formData = new FormData();
+      const fileInput = document.getElementById('couponFile');
+      formData.append('couponFile', fileInput.files[0]);
+      console.log(resp);
+      console.log(fileInput.files[0])
+      console.log(formData);
+
+      try {
+        const response = await axios.post('http://localhost:3800/coupon/postFile', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' // Make sure to set the content type
+          }
+        });
+
+        if (!response.status === 200) {
+          throw new Error('Failed to upload file');
+        }
+
+        const data = response.data;
+        console.log('Response:', data);
+        alert('File uploaded successfully');
+      } catch (error) {
+        console.log('Error uploading file:', error);
+        alert('Failed to upload file');
+      }
+    });
+  </script>
+</body>
+
+</html>
